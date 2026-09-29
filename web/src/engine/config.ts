@@ -12,19 +12,24 @@ export const llm = {
   baseURL: env("LLM_BASE_URL", "https://api.inference.crusoecloud.com/v1"),
   apiKey: env("LLM_API_KEY"),
   provider: env("LLM_PROVIDER_LABEL", "Crusoe"),
+  // Default IDs are exactly as Crusoe's GET /v1/models lists them.
   models: {
     /** Planning, routing, copy. Cheap and good at tool-style JSON. */
-    fast: env("MODEL_FAST", "deepseek-ai/DeepSeek-V4-Flash"),
+    fast: env("MODEL_FAST", "deepseek-ai/Deepseek-V4-Flash"),
     /** Structured storyboard writing. */
-    writer: env("MODEL_WRITER", "zai/GLM-5.3"),
+    writer: env("MODEL_WRITER", "zai-org/GLM-5.3"),
     /** Reads screenshots and reviews rendered frames. */
-    vision: env("MODEL_VISION", "qwen/Qwen3.8-27B"),
+    vision: env("MODEL_VISION", "Qwen/Qwen3.8-27B"),
   },
-  /** USD per million tokens, [input, output]. Used for the live cost ticker. Override with PRICE_<ROLE>="in,out". */
+  /**
+   * USD per million tokens, [input, output], from crusoe.ai/cloud/pricing. Used for the live cost counter.
+   * Qwen3.8 27B has no published serverless price; the default is the Nemotron 3 Nano Omni multimodal rate,
+   * a conservative estimate. Override with PRICE_<ROLE>="in,out".
+   */
   prices: {
     fast: parsePrice(env("PRICE_FAST", "0.14,0.28")),
-    writer: parsePrice(env("PRICE_WRITER", "0.6,2.2")),
-    vision: parsePrice(env("PRICE_VISION", "0.2,0.6")),
+    writer: parsePrice(env("PRICE_WRITER", "1.40,4.40")),
+    vision: parsePrice(env("PRICE_VISION", "0.30,1.83")),
   },
 };
 

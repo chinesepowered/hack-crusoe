@@ -9,10 +9,20 @@ export const FFMPEG: string = process.env.FFMPEG_PATH || require("ffmpeg-static"
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 export const FFPROBE: string = process.env.FFPROBE_PATH || require("ffprobe-static").path;
 
+/** A path relative to `from`, always with forward slashes (stored in job files and used in URLs). */
+export const relPosix = (from: string, to: string) => path.relative(from, to).split(path.sep).join("/");
+
+/**
+ * On Windows, npm and npx are .cmd shims that Node can only start through a shell.
+ * Only these fixed tool names get a shell; commands that take user input (git, ffmpeg) never do.
+ */
+const NEEDS_SHELL = /^(npm|npx|pnpm)$/;
+
 /** Run a command, reject with its stderr tail on failure. */
 export function run(cmd: string, args: string[], opts: { cwd?: string; input?: Buffer; timeoutMs?: number; env?: NodeJS.ProcessEnv } = {}) {
   return new Promise<string>((resolve, reject) => {
-    const p = spawn(cmd, args, { cwd: opts.cwd, env: opts.env ?? process.env });
+    const shell = process.platform === "win32" && NEEDS_SHELL.test(cmd);
+    const p = spawn(cmd, args, { cwd: opts.cwd, env: opts.env ?? process.env, shell, windowsHide: true });
     let out = "";
     let err = "";
     const timer = opts.timeoutMs ? setTimeout(() => p.kill("SIGKILL"), opts.timeoutMs) : null;

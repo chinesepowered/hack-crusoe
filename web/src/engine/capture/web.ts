@@ -149,7 +149,7 @@ export function makeTheme(bg: string, ink: string, accents: string[], font: stri
 }
 
 async function shoot(page: Page, dir: string, id: string, kind: Shot["kind"], extra: Partial<Shot> = {}): Promise<Shot> {
-  const file = path.join("shots", `${id}.jpg`);
+  const file = `shots/${id}.jpg`;
   const size = page.viewportSize()!;
   let height = size.height;
   if (kind === "fullpage") {

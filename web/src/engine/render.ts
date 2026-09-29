@@ -165,7 +165,8 @@ export async function renderVideo(spec: RenderSpec, outBase: string, onProgress:
     }),
   );
   const list = path.join(work, "segments.txt");
-  fs.writeFileSync(list, segments.map((f) => `file '${f}'`).join("\n"));
+  // Forward slashes keep the concat list valid on Windows too.
+  fs.writeFileSync(list, segments.map((f) => `file '${f.split(path.sep).join("/")}'`).join("\n"));
   await run(FFMPEG, ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", list, "-c", "copy", video]);
 
   // 3. Soundtrack.

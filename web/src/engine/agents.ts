@@ -79,7 +79,8 @@ function renderSpec(job: Job, scenes: Scene[], cut: CutId): RenderSpec {
   };
 }
 
-const rel = (job: Job, f: string) => path.relative(jobDir(job.id), f);
+/** Job-relative path with forward slashes, since these are stored in job.json and used in URLs. */
+const rel = (job: Job, f: string) => path.relative(jobDir(job.id), f).split(path.sep).join("/");
 
 /* ------------------------------------------------------------------ agents */
 

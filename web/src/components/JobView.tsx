@@ -30,10 +30,11 @@ export function JobView({ initial }: { initial: Job }) {
   const title = job.understanding?.name ?? job.capture?.name ?? job.input.target.replace(/^https?:\/\//, "");
 
   return (
-    <main className="grain relative flex-1">
+    // On large screens the job page is a one-screen dashboard: the columns scroll, the page does not.
+    <main className="grain relative flex flex-1 flex-col lg:h-screen lg:overflow-hidden">
       <div className="aurora opacity-60" />
-      <div className="relative z-10 mx-auto max-w-[1400px] px-6 pb-16">
-        <nav className="flex items-center justify-between py-5">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-1 flex-col px-6 pb-16 lg:min-h-0 lg:pb-6">
+        <nav className="flex shrink-0 items-center justify-between py-5">
           <Link href="/">
             <Logo />
           </Link>
@@ -42,7 +43,7 @@ export function JobView({ initial }: { initial: Job }) {
           </Link>
         </nav>
 
-        <header className="glass mt-2 rounded-3xl p-6">
+        <header className="glass shrink-0 rounded-3xl p-6">
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div className="min-w-0">
               <div className="flex items-center gap-3">
@@ -74,8 +75,9 @@ export function JobView({ initial }: { initial: Job }) {
           {job.status === "failed" && <p className="mt-4 rounded-xl border border-bad/30 bg-bad/10 p-3 text-sm text-bad">{job.error}</p>}
         </header>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_440px]">
-          <div className="min-w-0 space-y-6">
+        <div className="mt-6 grid gap-6 lg:min-h-0 lg:flex-1 lg:grid-cols-[1fr_440px]">
+          <div className="min-w-0 space-y-6 lg:overflow-y-auto lg:pr-1">
+            {!job.capture && live && <Warmup job={job} />}
             {job.status === "awaiting_approval" && <Approval job={job} />}
             {job.outputs.length > 0 && <Outputs job={job} />}
             {job.storyboard && <StoryboardView job={job} />}
@@ -133,6 +135,24 @@ function Card({ title, right, children }: { title: string; right?: React.ReactNo
       </div>
       {children}
     </section>
+  );
+}
+
+/** Shown until the scout's first screenshots land, so the page is never blank. */
+function Warmup({ job }: { job: Job }) {
+  const expo = job.input.kind === "expo";
+  return (
+    <Card title="Capturing" right={<Pill tone="accent">live</Pill>}>
+      <p className="text-sm text-muted">
+        The {expo ? "App Scout" : "Web Scout"} is opening <span className="text-ink">{job.input.target}</span>
+        {expo ? ", building it for the web and tapping through its screens." : " in a real browser and reading every page."}
+      </p>
+      <div className="mt-5 grid grid-cols-3 gap-3">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="shimmer aspect-video rounded-xl border border-line" style={{ animationDelay: `${i * 0.25}s` }} />
+        ))}
+      </div>
+    </Card>
   );
 }
 
@@ -286,9 +306,13 @@ function Captured({ job }: { job: Job }) {
 }
 
 function Room({ job }: { job: Job }) {
-  const end = useRef<HTMLDivElement>(null);
+  const list = useRef<HTMLDivElement>(null);
   const [text, setText] = useState("");
-  useEffect(() => end.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), [job.messages.length]);
+  // Keep the newest message in view by scrolling the room itself, never the page.
+  useEffect(() => {
+    const el = list.current;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+  }, [job.messages.length]);
   const send = async () => {
     if (!text.trim()) return;
     const t = text;
@@ -296,7 +320,7 @@ function Room({ job }: { job: Job }) {
     await fetch(`/api/jobs/${job.id}/message`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text: t }) });
   };
   return (
-    <aside className="glass flex h-[calc(100vh-140px)] min-h-[560px] flex-col rounded-3xl lg:sticky lg:top-6">
+    <aside className="glass flex h-[75vh] min-h-[520px] flex-col rounded-3xl lg:h-full lg:min-h-0">
       <div className="border-b border-line p-5">
         <div className="flex items-center justify-between">
           <h2 className="font-semibold">Crew room</h2>
@@ -311,11 +335,10 @@ function Room({ job }: { job: Job }) {
           ))}
         </div>
       </div>
-      <div className="flex-1 space-y-3 overflow-y-auto p-5">
+      <div ref={list} className="flex-1 space-y-3 overflow-y-auto p-5">
         {job.messages.map((m) => (
           <Message key={m.id} m={m} jobId={job.id} />
         ))}
-        <div ref={end} />
       </div>
       <div className="border-t border-line p-3">
         <div className="flex gap-2">

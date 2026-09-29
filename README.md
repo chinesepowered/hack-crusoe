@@ -1,14 +1,16 @@
 # LaunchReel
 
-**Paste a website URL or an Expo React Native repo, and a crew of five AI agents turns it into YouTube-ready launch videos.**
-The crew captures the real product in a real browser, writes the script, critiques every rendered frame, and hands you a vertical Short plus a 1-minute promo.
-Each run also includes captions, a thumbnail and the YouTube title, description and tags. The crew runs on open models on Crusoe and coordinates in a Band room.
+**An end-to-end marketing team for vibe coders, made of AI agents. It starts with the bread and butter: marketing videos.**
+Paste a website URL or an Expo React Native repo, and five agents capture the real product in a real browser, write the script, critique every rendered frame, and hand you a vertical YouTube Short plus a 1-minute promo, with captions, a thumbnail and YouTube copy.
+The crew runs on open models on Crusoe and coordinates in a Band room.
 
 ## The problem
 
-Small teams ship products in days, then either lose a weekend in a video editor or post nothing. With no video there's no YouTube Short, no Play Store promo video and no launch post, so most indie apps and side projects launch to silence. Existing AI video tools want you to write the script and upload the footage yourself, and nobody checks whether the result is readable or even true.
+In 2026 anyone can vibe code an app over a weekend, so everyone does. Building stopped being the hard part; getting found is, and the median user base is still zero. Apps get found through marketing: short videos, store previews, launch posts. That takes scripts, screen captures, voiceovers and edits, so most makers skip it, and nobody ever sees what they built. Existing AI video tools still want you to bring the script and the footage, and nobody checks whether the result is readable or even true.
 
 ## Our solution
+
+LaunchReel is the marketing team a solo maker doesn't have. Today it makes marketing videos from one link. Next: more promo formats, then posting them to LinkedIn and other channels for you.
 
 | Step | Agent | What happens |
 |---|---|---|
@@ -33,13 +35,13 @@ Output per run: `short.mp4` (1080x1920), `main.mp4` (1920x1080), `.srt` captions
 
 ### Crusoe
 
-- One OpenAI-compatible client pointed at `https://api.inference.crusoecloud.com/v1`, with a model for each job:
-  - **DeepSeek-V4-Flash** handles planning and routing (fast, cheap, good at structured JSON).
-  - **GLM-5.3** writes the storyboard, a long structured generation with strict constraints.
-  - **Qwen3.8-27B** (multimodal) does both vision jobs: reading product screenshots, and critiquing rendered frames.
+- One OpenAI-compatible client pointed at `https://api.inference.crusoecloud.com/v1`, with a model for each job (IDs exactly as Crusoe's `/v1/models` lists them):
+  - **`deepseek-ai/Deepseek-V4-Flash`** handles planning and routing (fast, cheap, good at structured JSON).
+  - **`zai-org/GLM-5.3`** writes the storyboard, a long structured generation with strict constraints.
+  - **`Qwen/Qwen3.8-27B`** (multimodal) does both vision jobs: reading product screenshots, and critiquing rendered frames.
 - Retries with backoff on 429/503. Model roles are spread across different models, so Crusoe's per-model rate limits don't collide.
-- A live cost counter: every call's token usage is recorded and shown per job ("Model spend", "tokens").
-- To switch provider, set `LLM_BASE_URL`, `LLM_API_KEY` and `MODEL_*` in `web/.env.local`. We developed against another OpenAI-compatible endpoint and switch to Crusoe for the demo; the code doesn't change.
+- A live cost counter: every call's token usage is recorded and priced per job ("Model spend"). Prices are Crusoe's list prices per million tokens: DeepSeek V4 Flash $0.14 in / $0.28 out, GLM 5.3 $1.40 / $4.40. Qwen3.8 27B has no published serverless price, so it is estimated at the Nemotron 3 Nano Omni multimodal rate ($0.30 / $1.83).
+- To switch provider, set `LLM_BASE_URL`, `LLM_API_KEY` and `MODEL_*` in `web/.env.local`. We developed against another OpenAI-compatible endpoint and run the demo on Crusoe; the code doesn't change.
 
 ### Band
 
@@ -77,9 +79,10 @@ pnpm dev                                    # http://localhost:3000
 # or headless: pnpm reel https://yourproduct.com --both
 ```
 
-Expo projects: paste a git URL or a local folder path. The project is copied into `web/.data` (gitignored, with `.env` files skipped), installed with **npm**, and exported for web. Only screenshots, visible text and the README go to the model provider.
+Works on macOS, Linux and Windows. Expo projects: paste a git URL or a local folder path. The project is copied into `web/.data` (gitignored, with `.env` files skipped), installed with **npm**, and exported for web. Only screenshots, visible text and the README go to the model provider.
 
 ## Pitch materials
 
-- `pitch/launchreel-pitch.mp4`: the 3-minute pitch video, rendered by LaunchReel's own engine.
+- `pitch/launchreel-pitch-v2.mp4`: minutes 2 and 3 of the demo video (the problem, the solution, a real run), rendered by LaunchReel's own engine. Minute 1 is a sample promo joined in front of it.
+- `pitch/launchreel-pitch.mp4`: the original 3-minute pitch video.
 - `slides.html`: a 4-slide deck (open in a browser, use the arrow keys).

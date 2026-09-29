@@ -80,3 +80,13 @@ body {
   to { opacity: 1; transform: none; }
 }
 .rise { animation: rise 0.35s ease-out both; }
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, #ffffff08 0%, #ffffff18 50%, #ffffff08 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}

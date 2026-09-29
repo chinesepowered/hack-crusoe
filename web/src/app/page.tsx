@@ -33,15 +33,15 @@ export default function Home() {
 
         <section className="mx-auto mt-14 max-w-3xl text-center">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-white/5 px-3 py-1 text-xs text-muted">
-            <span className="h-1.5 w-1.5 rounded-full bg-good" /> Websites and Expo React Native apps
+            <span className="h-1.5 w-1.5 rounded-full bg-good" /> For makers shipping websites and Expo apps
           </div>
           <h1 className="text-5xl leading-[1.02] font-semibold tracking-tight sm:text-7xl">
-            Your launch video,
+            You vibe coded the app.
             <br />
-            <span className="font-serif font-normal italic gradient-text">made by a crew of agents.</span>
+            <span className="font-serif font-normal italic gradient-text">Now get it seen.</span>
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-lg text-muted">
-            Paste a URL or an Expo repo. Five agents capture your real product, write the script, critique every frame and hand you a YouTube Short and a 1-minute promo, ready to post.
+            Building is the easy part now. Paste your website or Expo repo, and five agents turn your real product into a YouTube Short and a 1-minute promo, so the app you shipped finds its first users.
           </p>
         </section>
 

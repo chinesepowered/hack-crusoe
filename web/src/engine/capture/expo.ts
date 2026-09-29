@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
 import { browser, ctxDefaults, mount, run, sleep } from "../media";
@@ -15,7 +16,7 @@ async function fetchSource(target: string, dest: string, log: Log) {
     log(`Cloning ${target}`);
     await run("git", ["clone", "--depth", "1", target, dest], { timeoutMs: 180000 });
   } else {
-    const src = path.resolve(target.replace(/^~(?=\/)/, process.env.HOME ?? "~"));
+    const src = path.resolve(target.replace(/^~(?=[\\/]|$)/, os.homedir()));
     if (!fs.existsSync(path.join(src, "package.json"))) throw new Error(`No package.json found at ${src}.`);
     log(`Copying ${src}`);
     // Never copy secrets: skip .env files along with build output and dependencies.
@@ -98,7 +99,7 @@ export async function captureExpo(target: string, dir: string, log: Log): Promis
         if (seen.has(hash) || text.trim().length < 3) return false;
         seen.add(hash);
         const id = `screen-${shots.length + 1}`;
-        const file = path.join("shots", `${id}.jpg`);
+        const file = `shots/${id}.jpg`;
         await page.screenshot({ path: path.join(dir, file), type: "jpeg", quality: 90 });
         shots.push({ id, file, kind: "mobile", width: MOBILE.width * 3, height: MOBILE.height * 3, title: title || `Screen ${shots.length + 1}` });
         log(`Captured screen "${title}".`);
@@ -132,7 +133,7 @@ export async function captureExpo(target: string, dir: string, log: Log): Promis
   if (shots.length < 2) {
     for (const f of repoScreenshots(src).slice(0, 8)) {
       const id = `screen-${shots.length + 1}`;
-      const file = path.join("shots", `${id}${path.extname(f).toLowerCase()}`);
+      const file = `shots/${id}${path.extname(f).toLowerCase()}`;
       fs.copyFileSync(f, path.join(dir, file));
       shots.push({ id, file, kind: "mobile", width: 1170, height: 2532, title: path.basename(f) });
     }
