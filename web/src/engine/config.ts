@@ -22,6 +22,15 @@ export const llm = {
     vision: env("MODEL_VISION", "Qwen/Qwen3.8-27B"),
   },
   /**
+   * reasoning_effort per role ("" = model default). GLM-5.3 otherwise reasons at length and can spend its
+   * whole output budget thinking before it writes the storyboard; "low" keeps it fast, cheap and complete.
+   */
+  reasoning: {
+    fast: env("REASONING_FAST", ""),
+    writer: env("REASONING_WRITER", "low"),
+    vision: env("REASONING_VISION", ""),
+  },
+  /**
    * USD per million tokens, [input, output], from crusoe.ai/cloud/pricing. Used for the live cost counter.
    * Qwen3.8 27B has no published serverless price; the default is the Nemotron 3 Nano Omni multimodal rate,
    * a conservative estimate. Override with PRICE_<ROLE>="in,out".
