@@ -83,6 +83,5 @@ Works on macOS, Linux and Windows. Expo projects: paste a git URL or a local fol
 
 ## Pitch materials
 
-- `pitch/launchreel-pitch-v2.mp4`: minutes 2 and 3 of the demo video (the problem, the solution, a real run), rendered by LaunchReel's own engine. Minute 1 is a sample promo joined in front of it.
-- `pitch/launchreel-pitch.mp4`: the original 3-minute pitch video.
+- The demo video is submitted separately (videos are not kept in the repo). `web/scripts/pitch-v2.mts` renders its minutes 2 and 3 (the problem, the solution, a real run) with LaunchReel's own engine; minute 1 is a sample promo joined in front of it.
 - `slides.html`: a 4-slide deck (open in a browser, use the arrow keys).
