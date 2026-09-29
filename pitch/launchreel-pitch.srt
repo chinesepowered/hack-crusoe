@@ -1,0 +1,235 @@
+1
+00:00:00,350 --> 00:00:03,529
+Every app needs a launch video. Almost none
+
+2
+00:00:03,529 --> 00:00:04,712
+of them get one.
+
+3
+00:00:05,212 --> 00:00:08,213
+Small teams ship a product in days. Then
+
+4
+00:00:08,213 --> 00:00:10,989
+they either lose a weekend in a video
+
+5
+00:00:10,989 --> 00:00:15,116
+editor, recording screens, writing a script and cutting
+
+6
+00:00:15,116 --> 00:00:18,342
+two aspect ratios, or they post nothing. No
+
+7
+00:00:18,342 --> 00:00:21,568
+video means no YouTube Short, no Play Store
+
+8
+00:00:21,568 --> 00:00:23,968
+promo, and a launch nobody sees.
+
+9
+00:00:24,468 --> 00:00:27,831
+Meet LaunchReel. Paste a website, or an Expo
+
+10
+00:00:27,831 --> 00:00:30,658
+React Native repo, and a crew of five
+
+11
+00:00:30,658 --> 00:00:34,173
+AI agents turns your real product into YouTube
+
+12
+00:00:34,173 --> 00:00:35,701
+ready launch videos.
+
+13
+00:00:36,201 --> 00:00:39,499
+It works like a tiny production studio. Scouts
+
+14
+00:00:39,499 --> 00:00:42,511
+capture the product, a writer and a critic
+
+15
+00:00:42,511 --> 00:00:45,881
+argue over every frame, and a producer delivers
+
+16
+00:00:45,881 --> 00:00:46,885
+the final cut.
+
+17
+00:00:47,385 --> 00:00:50,816
+The Reel Director reads your request and recruits
+
+18
+00:00:50,816 --> 00:00:54,036
+the right specialist at runtime. The Web Scout
+
+19
+00:00:54,036 --> 00:00:56,486
+opens a site in a real browser. The
+
+20
+00:00:56,486 --> 00:00:59,006
+App Scout builds an Expo app for the
+
+21
+00:00:59,006 --> 00:01:02,087
+web and taps through every screen. Then Qwen
+
+22
+00:01:02,087 --> 00:01:05,517
+3.8, running on Crusoe, reads the screenshots and
+
+23
+00:01:05,517 --> 00:01:08,388
+works out what the product actually does.
+
+24
+00:01:08,888 --> 00:01:12,511
+The Storyboard Writer turns that brief into scenes,
+
+25
+00:01:12,511 --> 00:01:16,987
+voiceover, captions, and YouTube titles, descriptions and tags,
+
+26
+00:01:16,987 --> 00:01:19,616
+for a vertical Short and a one minute
+
+27
+00:01:19,616 --> 00:01:20,042
+promo.
+
+28
+00:01:20,542 --> 00:01:23,609
+Then comes our favorite part. The Frame Critic
+
+29
+00:01:23,609 --> 00:01:26,943
+looks at real rendered frames, and blocks anything
+
+30
+00:01:26,943 --> 00:01:30,277
+unreadable, any screenshot that does not match the
+
+31
+00:01:30,277 --> 00:01:32,678
+claim, and any number that is not in
+
+32
+00:01:32,678 --> 00:01:35,412
+the source. On this run it blocked twice,
+
+33
+00:01:35,412 --> 00:01:38,146
+once for a browser error page our capture
+
+34
+00:01:38,146 --> 00:01:40,613
+had missed, and the writer had to fix
+
+35
+00:01:40,613 --> 00:01:40,813
+it.
+
+36
+00:01:41,313 --> 00:01:44,308
+When the critic signs off, the Director asks
+
+37
+00:01:44,308 --> 00:01:46,827
+you. Approve in one click, or ask for
+
+38
+00:01:46,827 --> 00:01:49,754
+changes in plain English, and the crew goes
+
+39
+00:01:49,754 --> 00:01:50,639
+around again.
+
+40
+00:01:51,139 --> 00:01:55,056
+The Producer narrates with ElevenLabs, renders every frame
+
+41
+00:01:55,056 --> 00:01:58,905
+deterministically, mixes an original music bed that ducks
+
+42
+00:01:58,905 --> 00:02:02,214
+under the voice, and masters to YouTube loudness.
+
+43
+00:02:02,714 --> 00:02:05,384
+You get a vertical Short, a one minute
+
+44
+00:02:05,384 --> 00:02:08,615
+promo, captions, a thumbnail, and copy you can
+
+45
+00:02:08,615 --> 00:02:11,074
+paste straight into YouTube Studio.
+
+46
+00:02:11,574 --> 00:02:15,009
+The whole crew runs on open models on
+
+47
+00:02:15,009 --> 00:02:19,466
+Crusoe. DeepSeek V4 Flash plans, GLM 5.3 writes,
+
+48
+00:02:19,466 --> 00:02:22,901
+and Qwen 3.8 sees. A full launch, two
+
+49
+00:02:22,901 --> 00:02:27,172
+videos with two critic rounds, is about eighty
+
+50
+00:02:27,172 --> 00:02:28,658
+thousand tokens.
+
+51
+00:02:29,158 --> 00:02:32,068
+Band is the room. Every agent is its
+
+52
+00:02:32,068 --> 00:02:35,786
+own Band identity, every handoff is a mention,
+
+53
+00:02:35,786 --> 00:02:39,666
+the scout is recruited mid conversation, and the
+
+54
+00:02:39,666 --> 00:02:43,385
+critic's veto and your approval both happen in
+
+55
+00:02:43,385 --> 00:02:46,456
+the room. Take Band away, and no agent
+
+56
+00:02:46,456 --> 00:02:47,992
+ever receives work.
+
+57
+00:02:48,492 --> 00:02:51,441
+And yes, this pitch video was rendered by
+
+58
+00:02:51,441 --> 00:02:53,168
+LaunchReel's own engine.
+
+59
+00:02:53,668 --> 00:02:57,221
+LaunchReel. Paste a link, post a launch.

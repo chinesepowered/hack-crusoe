@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LaunchReel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#07070b; --panel:#101017; --line:#24242f; --ink:#f4f4f7; --muted:#9a9aad; --a:#a78bfa; --b:#f472b6; --good:#34d399; --bad:#fb7185; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bg); color: var(--ink); font-family: Inter, system-ui, sans-serif; overflow: hidden; }
+  .deck { position: relative; width: 100vw; height: 100vh; }
+  .slide { position: absolute; inset: 0; padding: 7vh 7vw; display: flex; flex-direction: column; justify-content: center; opacity: 0; transform: translateY(20px) scale(.99); transition: opacity .5s ease, transform .5s ease; pointer-events: none; }
+  .slide.on { opacity: 1; transform: none; pointer-events: auto; }
+  .aurora { position: fixed; inset: -20% -10% auto -10%; height: 90vh; pointer-events: none; filter: blur(30px);
+    background: radial-gradient(40% 50% at 18% 30%, color-mix(in srgb, var(--a) 30%, transparent), transparent 70%),
+                radial-gradient(35% 45% at 82% 18%, color-mix(in srgb, var(--b) 24%, transparent), transparent 70%),
+                radial-gradient(30% 40% at 55% 70%, color-mix(in srgb, #38bdf8 14%, transparent), transparent 70%); }
+  .kicker { font: 500 14px 'JetBrains Mono', monospace; letter-spacing: .18em; text-transform: uppercase; color: var(--a); margin-bottom: 2.4vh; }
+  h1 { font-size: clamp(44px, 7.4vw, 120px); line-height: .98; letter-spacing: -.045em; font-weight: 700; }
+  h2 { font-size: clamp(34px, 4.6vw, 72px); line-height: 1.02; letter-spacing: -.035em; font-weight: 700; }
+  .serif { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; letter-spacing: -.02em; }
+  .grad { background: linear-gradient(90deg, var(--a), var(--b)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { margin-top: 3vh; font-size: clamp(17px, 1.6vw, 26px); line-height: 1.45; color: var(--muted); max-width: 60ch; }
+  .row { display: flex; gap: 1.4vw; margin-top: 5vh; flex-wrap: wrap; }
+  .card { flex: 1; min-width: 180px; background: color-mix(in srgb, var(--panel) 80%, transparent); border: 1px solid var(--line); border-radius: 22px; padding: 2.4vh 1.6vw; backdrop-filter: blur(10px); }
+  .card .n { font: 500 13px 'JetBrains Mono', monospace; color: var(--muted); }
+  .card h3 { font-size: clamp(16px, 1.4vw, 22px); margin: 1vh 0 .8vh; letter-spacing: -.01em; }
+  .card p { font-size: clamp(13px, 1.05vw, 16px); line-height: 1.5; color: var(--muted); }
+  .dot { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font: 700 12px 'JetBrains Mono', monospace; color: #000; }
+  .big { font-size: clamp(56px, 8vw, 132px); font-weight: 800; letter-spacing: -.05em; line-height: 1; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4vw; margin-top: 5vh; }
+  .stat .big { font-size: clamp(40px, 5vw, 84px); }
+  .stat p { color: var(--muted); margin-top: 1vh; font-size: clamp(14px, 1.1vw, 18px); line-height: 1.45; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-size: 14px; color: var(--muted); }
+  .flow { font: 500 clamp(12px, 1vw, 16px) 'JetBrains Mono', monospace; color: var(--muted); margin-top: 3vh; line-height: 2; }
+  .flow b { color: var(--ink); font-weight: 500; }
+  .flow .x { color: var(--bad); } .flow .ok { color: var(--good); }
+  table { width: 100%; border-collapse: collapse; margin-top: 4vh; font-size: clamp(14px, 1.15vw, 19px); }
+  td { padding: 1.8vh 1vw; border-top: 1px solid var(--line); vertical-align: top; color: var(--muted); line-height: 1.45; }
+  td:first-child { color: var(--ink); font-weight: 700; white-space: nowrap; width: 12%; }
+  .nav { position: fixed; bottom: 3vh; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 5; }
+  .nav i { width: 28px; height: 4px; border-radius: 2px; background: #ffffff22; cursor: pointer; transition: background .3s; }
+  .nav i.on { background: linear-gradient(90deg, var(--a), var(--b)); }
+  .logo { position: fixed; top: 4vh; left: 7vw; display: flex; align-items: center; gap: 10px; font-weight: 600; z-index: 5; }
+  .logo span { width: 28px; height: 28px; border-radius: 9px; background: linear-gradient(135deg, var(--a), var(--b)); display: grid; place-items: center; }
+  .count { position: fixed; top: 4vh; right: 7vw; font: 500 13px 'JetBrains Mono', monospace; color: var(--muted); z-index: 5; }
+</style>
+</head>
+<body>
+<div class="aurora"></div>
+<div class="logo"><span><svg width="12" height="12" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>LaunchReel</div>
+<div class="count" id="count"></div>
+<div class="deck">
+
+  <section class="slide">
+    <div class="kicker">The AI Conference Hack Day 2026</div>
+    <h1>Your launch video,<br><span class="serif grad">made by a crew of agents.</span></h1>
+    <p class="lead">Paste a website or an Expo React Native repo. Five agents capture the real product, write the script, critique every rendered frame, and hand you a YouTube Short and a 1-minute promo, ready to post.</p>
+    <div class="row" style="flex:none">
+      <span class="pill">Open models on Crusoe</span><span class="pill">Coordinated in Band</span><span class="pill">Voice by ElevenLabs</span>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">The problem</div>
+    <h2>Shipping takes days.<br><span class="serif grad">The launch video never happens.</span></h2>
+    <div class="stats">
+      <div class="stat"><div class="big grad">0</div><p>videos is the default for indie apps and side projects: no Short, no Play Store promo, no launch post.</p></div>
+      <div class="stat"><div class="big grad">1 weekend</div><p>in a video editor is the alternative: screen recording, scripting, voiceover, captions, exports in two aspect ratios.</p></div>
+      <div class="stat"><div class="big grad">0 checks</div><p>in today's AI video tools: you bring the script and the footage, and nobody verifies it is readable or true.</p></div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">How it works</div>
+    <h2>A crew, not a prompt.</h2>
+    <div class="row">
+      <div class="card"><div class="dot" style="background:#a78bfa">RD</div><h3>Reel Director</h3><p>Recruits the right scout at runtime and owns your approval.</p></div>
+      <div class="card"><div class="dot" style="background:#38bdf8">WS</div><h3>Web / App Scout</h3><p>Real Chromium. Expo apps are exported for web and tapped through. Qwen reads every screen.</p></div>
+      <div class="card"><div class="dot" style="background:#fbbf24">SW</div><h3>Storyboard Writer</h3><p>Scenes, voiceover, captions and YouTube copy for two cuts.</p></div>
+      <div class="card"><div class="dot" style="background:#fb7185">FC</div><h3>Frame Critic</h3><p>Looks at real rendered frames and blocks anything unreadable or unsupported.</p></div>
+      <div class="card"><div class="dot" style="background:#34d399">PR</div><h3>Producer</h3><p>Narration, deterministic render, music ducking, -14 LUFS master.</p></div>
+    </div>
+    <div class="flow">
+      <b>you</b> "make a Short + promo" &rarr; <b>Director</b> recruits Web Scout &rarr; <b>Scout</b> brief &rarr; <b>Writer</b> 15 stills &rarr;
+      <b>Critic</b> <span class="x">BLOCKED</span> "scene 3 is a browser error page" &rarr; <b>Writer</b> revises &rarr; <b>Critic</b> <span class="ok">APPROVED</span> &rarr; <b>you</b> approve &rarr; <b>Producer</b> ships
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Built on</div>
+    <h2>Every handoff is real.</h2>
+    <table>
+      <tr><td>Crusoe</td><td>All model calls on open models via Crusoe Serverless Inference. <b style="color:var(--ink)">DeepSeek-V4-Flash</b> plans, <b style="color:var(--ink)">GLM-5.3</b> writes, <b style="color:var(--ink)">Qwen3.8-27B</b> sees: it reads product screenshots and critiques rendered frames. Live per-job token and cost counter.</td></tr>
+      <tr><td>Band</td><td>Six registered agents, one room per job. Handoffs are @mentions, the scout is recruited at runtime, the critic can veto, and rendering waits on a human approval in the room. Tool calls stream as room events. Delete the room and no agent receives work.</td></tr>
+      <tr><td>Output</td><td>Vertical Short and 1-minute promo, captions, thumbnail, YouTube title, description and tags. This pitch video was rendered by LaunchReel's own engine.</td></tr>
+    </table>
+  </section>
+
+</div>
+<div class="nav" id="nav"></div>
+<script>
+  const slides = [...document.querySelectorAll(".slide")];
+  const nav = document.getElementById("nav");
+  let i = 0;
+  slides.forEach((_, k) => { const d = document.createElement("i"); d.onclick = () => go(k); nav.appendChild(d); });
+  function go(k) {
+    i = Math.max(0, Math.min(slides.length - 1, k));
+    slides.forEach((s, n) => s.classList.toggle("on", n === i));
+    [...nav.children].forEach((d, n) => d.classList.toggle("on", n === i));
+    document.getElementById("count").textContent = `${i + 1} / ${slides.length}`;
+  }
+  addEventListener("keydown", (e) => {
+    if (["ArrowRight", "PageDown", " ", "Enter"].includes(e.key)) go(i + 1);
+    if (["ArrowLeft", "PageUp", "Backspace"].includes(e.key)) go(i - 1);
+  });
+  addEventListener("click", (e) => { if (!e.target.closest(".nav")) go(i + (e.clientX > innerWidth / 3 ? 1 : -1)); });
+  go(0);
+</script>
+</body>
+</html>
